@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,7 +20,6 @@ import com.br.fatecrl.conta.bean.Conta;
 import com.br.fatecrl.conta.service.ContaService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -82,13 +82,19 @@ public class ContaController {
 	public ResponseEntity<Conta> put(@RequestBody Conta conta){
 		if (service.update(conta)) {
 			return ResponseEntity.ok(conta);
-			//return ResponseEntity.noContent().build();
 		}
 		return ResponseEntity.notFound().build();
-//		return service.update(conta)  
-//				? ResponseEntity.ok(conta)
-//				: ResponseEntity.notFound().build();
 	}
+
+
+	@PatchMapping
+	@Operation(summary = "Atualiza uma conta")
+	public ResponseEntity<Conta> patch(@RequestBody Conta conta){
+		if (service.updatePatch(conta)) {
+			return ResponseEntity.ok(conta);
+		}
+		return ResponseEntity.notFound().build();
+	}	
 	
 	@DeleteMapping(value = "/{id}")
 	@Operation(summary = "Exclui uma conta")
@@ -97,7 +103,5 @@ public class ContaController {
 			return ResponseEntity.noContent().build();
 		}
 		return ResponseEntity.notFound().build();
-	}
-	
-	
+	}	
 }

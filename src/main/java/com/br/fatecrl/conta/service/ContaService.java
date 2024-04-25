@@ -2,6 +2,7 @@ package com.br.fatecrl.conta.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.springframework.stereotype.Service;
 
@@ -23,12 +24,10 @@ public class ContaService {
 	}
 	
 	public Conta find(Conta conta){
-		for (Conta c: contas) {
-			if (c.equals(conta)) {
-				return c;
-			}
-		}
-		return null;
+		return contas
+				.stream()
+				.filter(c -> c.equals(conta))
+				.findFirst().get();
 	}
 	
 	public Conta find(Long id) {
@@ -52,6 +51,23 @@ public class ContaService {
 			_conta.setNumero(conta.getNumero());
 			_conta.setTitular(conta.getTitular());
 			_conta.setSaldo(conta.getSaldo());
+			return true;
+		}
+		return false;
+	}
+	
+
+	public Boolean updatePatch(Conta conta) {
+		Conta _conta = this.find(conta);
+		if (_conta != null) {
+			if (conta.getAgencia() != null && conta.getAgencia() > 0)
+				_conta.setAgencia(conta.getAgencia());
+			if (conta.getNumero() != null && !conta.getNumero().isEmpty())
+				_conta.setNumero(conta.getNumero());
+			if (conta.getTitular() != null && !conta.getTitular().isEmpty())
+				_conta.setTitular(conta.getTitular());
+			if (conta.getSaldo() != null && conta.getSaldo() > 0)
+				_conta.setSaldo(conta.getSaldo());
 			return true;
 		}
 		return false;
