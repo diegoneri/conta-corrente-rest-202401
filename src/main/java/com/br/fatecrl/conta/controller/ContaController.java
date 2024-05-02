@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.br.fatecrl.conta.bean.Conta;
+import com.br.fatecrl.conta.model.Conta;
 import com.br.fatecrl.conta.service.ContaService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -90,7 +90,7 @@ public class ContaController {
 	@PatchMapping
 	@Operation(summary = "Atualiza uma conta")
 	public ResponseEntity<Conta> patch(@RequestBody Conta conta){
-		if (service.updatePatch(conta)) {
+		if (service.update(conta)) {
 			return ResponseEntity.ok(conta);
 		}
 		return ResponseEntity.notFound().build();

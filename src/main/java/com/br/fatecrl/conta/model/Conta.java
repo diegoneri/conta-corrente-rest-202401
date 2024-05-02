@@ -1,33 +1,43 @@
-package com.br.fatecrl.conta.bean;
+package com.br.fatecrl.conta.model;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Conta implements Serializable {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-	private static final long serialVersionUID = -4205156507257923921L;
-	private static Long nextId = 1L;
+@Entity
+@Table(name = "tb_conta")
+public class Conta implements Serializable {
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(name = "nr_agencia", nullable = false)
 	private Integer agencia;
+	@Column(name = "nm_numero", nullable = false, length = 10)
 	private String numero;
+	@Column(name = "nm_titular", nullable = false, length = 100)
 	private String titular;
+	@Column(name = "vl_saldo", nullable = false)
 	private Double saldo;
-	
+
 	public Conta() {
-		
+
 	}
-	
+
 	public Conta(Long id) {
 		this.id = id;
 	}
-	
-	public Long generateId() {
-		return nextId++;
-	}
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -35,24 +45,31 @@ public class Conta implements Serializable {
 	public Integer getAgencia() {
 		return agencia;
 	}
+
 	public void setAgencia(Integer agencia) {
 		this.agencia = agencia;
 	}
+
 	public String getNumero() {
 		return numero;
 	}
+
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
+
 	public String getTitular() {
 		return titular;
 	}
+
 	public void setTitular(String titular) {
 		this.titular = titular;
 	}
+
 	public Double getSaldo() {
 		return saldo;
 	}
+
 	public void setSaldo(Double saldo) {
 		this.saldo = saldo;
 	}
@@ -73,6 +90,5 @@ public class Conta implements Serializable {
 		Conta other = (Conta) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
+
 }

@@ -1,82 +1,47 @@
 package com.br.fatecrl.conta.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.br.fatecrl.conta.bean.Conta;
+import com.br.fatecrl.conta.model.Conta;
+import com.br.fatecrl.conta.repository.ContaRepository;
 
 @Service
 public class ContaService {
-	private static List<Conta> contas = new ArrayList<>();
-	
-	public ContaService() {
-		contaFake();
-	}
-	
-	private void contaFake() {
-		Conta conta1 = new Conta(0L);
-		conta1.setTitular("Diego");
-		conta1.setSaldo(1000.0);
-		contas.add(conta1);
-	}
-	
-	public Conta find(Conta conta){
-		return contas
-				.stream()
-				.filter(c -> c.equals(conta))
-				.findFirst().get();
-	}
-	
-	public Conta find(Long id) {
-		return find(new Conta(id));
-	}
-	
-	public List<Conta> findAll() {
-		return contas;
-	}
-	
-	
-	public void create(Conta conta) {
-		conta.setId(conta.generateId());
-		contas.add(conta);
-	}
-	
-	public Boolean update(Conta conta) {
-		Conta _conta = this.find(conta);
-		if (_conta != null) {
-			_conta.setAgencia(conta.getAgencia());
-			_conta.setNumero(conta.getNumero());
-			_conta.setTitular(conta.getTitular());
-			_conta.setSaldo(conta.getSaldo());
-			return true;
-		}
-		return false;
-	}
-	
+	@Autowired
+	private ContaRepository repository;
 
-	public Boolean updatePatch(Conta conta) {
-		Conta _conta = this.find(conta);
-		if (_conta != null) {
-			if (conta.getAgencia() != null && conta.getAgencia() > 0)
-				_conta.setAgencia(conta.getAgencia());
-			if (conta.getNumero() != null && !conta.getNumero().isEmpty())
-				_conta.setNumero(conta.getNumero());
-			if (conta.getTitular() != null && !conta.getTitular().isEmpty())
-				_conta.setTitular(conta.getTitular());
-			if (conta.getSaldo() != null && conta.getSaldo() > 0)
-				_conta.setSaldo(conta.getSaldo());
+	public ContaService() {
+	}
+
+	public Conta find(Long id) {
+		Optional<Conta> obj = repository.findById(id);
+		return obj.orElse(null);
+	}
+
+	public List<Conta> findAll() {
+		return repository.findAll();
+	}
+
+	public Conta create(Conta conta) {
+		repository.save(conta);
+		return conta;
+	}
+
+	public Boolean update(Conta conta) {
+		if (repository.existsById(conta.getId())) {
+			repository.save(conta);
 			return true;
 		}
 		return false;
 	}
-	
+
 	public Boolean delete(Long id) {
-		Conta _conta = this.find(id);
-		if (_conta != null) {
-			contas.remove(_conta);
+		if (repository.existsById(id)) {
+			repository.deleteById(id);
 			return true;
 		}
 		return false;
