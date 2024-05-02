@@ -25,16 +25,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/contas")
-public class ContaController {
-	
+public class ContaController implements IController<Conta>{
 	@Autowired
 	private ContaService service;
 	
-//	@GetMapping("")
-//	public String healthCheck(){
-//		return "Estamos no ar!";
-//	}
-	
+	@Override
 	@GetMapping(produces = "application/json")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200"
@@ -51,10 +46,10 @@ public class ContaController {
 		return ResponseEntity.ok(service.findAll());
 	}
 	
-	//http://localhost:8080/contas/1
+	@Override
 	@GetMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<Conta> getConta(@PathVariable("id") Long id) {
-		Conta conta = service.find(id);
+	public ResponseEntity<Conta> get(@PathVariable("id") Long id) {
+		Conta conta = service.findById(id);
 		if (conta != null) {
 			return ResponseEntity.ok(conta);
 			//HTTP 200 OK
@@ -62,7 +57,7 @@ public class ContaController {
 		return ResponseEntity.notFound().build();
 	}	
 	
-	//http://localhost:8080/contas
+	@Override
 	@PostMapping
 	@Operation(summary = "Cria uma conta")
 	public ResponseEntity<Conta> post(@RequestBody Conta conta){
@@ -74,9 +69,9 @@ public class ContaController {
 						.buildAndExpand(conta.getId())
 						.toUri();
 		return ResponseEntity.created(location).body(conta);
-		//HTTP 201 CREATED
 	}
 	
+	@Override
 	@PutMapping
 	@Operation(summary = "Atualiza uma conta")
 	public ResponseEntity<Conta> put(@RequestBody Conta conta){
@@ -86,7 +81,7 @@ public class ContaController {
 		return ResponseEntity.notFound().build();
 	}
 
-
+	@Override
 	@PatchMapping
 	@Operation(summary = "Atualiza uma conta")
 	public ResponseEntity<Conta> patch(@RequestBody Conta conta){
@@ -96,6 +91,7 @@ public class ContaController {
 		return ResponseEntity.notFound().build();
 	}	
 	
+	@Override
 	@DeleteMapping(value = "/{id}")
 	@Operation(summary = "Exclui uma conta")
 	public ResponseEntity<Conta> delete(@PathVariable("id") Long id){
