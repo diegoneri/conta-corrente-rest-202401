@@ -10,28 +10,32 @@ import com.br.fatecrl.conta.model.Conta;
 import com.br.fatecrl.conta.repository.ContaRepository;
 
 @Service
-public class ContaService {
+public class ContaService implements IService<Conta> {
 	@Autowired
 	private ContaRepository repository;
 
 	public ContaService() {
 	}
 
-	public Conta find(Long id) {
+	@Override
+	public Conta findById(Long id) {
 		Optional<Conta> obj = repository.findById(id);
 		return obj.orElse(null);
 	}
 
+	@Override
 	public List<Conta> findAll() {
 		return repository.findAll();
 	}
 
+	@Override
 	public Conta create(Conta conta) {
 		repository.save(conta);
 		return conta;
 	}
 
-	public Boolean update(Conta conta) {
+	@Override
+	public boolean update(Conta conta) {
 		if (repository.existsById(conta.getId())) {
 			repository.save(conta);
 			return true;
@@ -39,7 +43,8 @@ public class ContaService {
 		return false;
 	}
 
-	public Boolean delete(Long id) {
+	@Override
+	public boolean delete(Long id) {
 		if (repository.existsById(id)) {
 			repository.deleteById(id);
 			return true;
