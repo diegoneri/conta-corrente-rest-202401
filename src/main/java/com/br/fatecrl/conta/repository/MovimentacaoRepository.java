@@ -18,7 +18,9 @@ public interface MovimentacaoRepository extends
 	
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO tb_movimentacao (vl_valor,conta_id,dt_data,ds_descricao,nm_tipo_movimentacao) VALUES " +
+    @Query(value = "INSERT INTO tb_movimentacao "
+    		+ "	(vl_valor,conta_id,dt_data,ds_descricao,nm_tipo_movimentacao) "
+    		+ "VALUES " +
             "( " +
                 ":#{#m.valor}, " +
                 ":#{#pConta}, " +
@@ -26,6 +28,7 @@ public interface MovimentacaoRepository extends
                 ":#{#m.descricao}, " +
                 ":#{#m.tipo.name} " +
             ")", nativeQuery = true)
-    void saveWithConta(@Param("m") Movimentacao movimentacao, @Param("pConta")Integer conta);
+    void saveWithConta(@Param("m") Movimentacao movimentacao
+    		       , @Param("pConta")Integer conta);
 
-}
+}	
