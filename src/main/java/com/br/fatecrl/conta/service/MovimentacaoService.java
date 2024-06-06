@@ -29,8 +29,8 @@ public class MovimentacaoService extends AbstractService<Movimentacao> {
 		return repository.findByConta(idConta);
 	}
 	
-	public void saveWithConta(Movimentacao movimentacao, Integer idConta) {
-		repository.saveWithConta(movimentacao, idConta);
+	public Movimentacao saveWithConta(Movimentacao movimentacao, Integer idConta) {
+		return repository.saveWithConta(movimentacao, idConta);
 	}
 	
 }

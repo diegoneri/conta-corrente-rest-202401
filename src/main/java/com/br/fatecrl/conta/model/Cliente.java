@@ -8,6 +8,8 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tb_cliente")
@@ -15,11 +17,15 @@ import jakarta.persistence.Table;
 public abstract class Cliente extends AbstractEntity {
 	private static final long serialVersionUID = 1L;
 	@Column(name = "nm_nome", length = 60)
+	@NotBlank
+	@Size(min = 4, max = 60)
 	private String nome;
+	@NotBlank
+	@Size(min = 4, max = 120)
 	@Column(name = "ds_endereco", length = 120)
 	private String endereco;
 
-	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+	@OneToOne(cascade = { CascadeType.MERGE })
 	@JoinColumn(name = "fk_conta_id", unique = true)
 	private Conta conta;
 

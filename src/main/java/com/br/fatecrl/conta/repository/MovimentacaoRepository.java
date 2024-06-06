@@ -26,6 +26,6 @@ public interface MovimentacaoRepository extends
                 ":#{#m.descricao}, " +
                 ":#{#m.tipo.name} " +
             ")", nativeQuery = true)
-    void saveWithConta(@Param("m") Movimentacao movimentacao, @Param("pConta")Integer conta);
+    Movimentacao saveWithConta(@Param("m") Movimentacao movimentacao, @Param("pConta")Integer conta);
 
 }
