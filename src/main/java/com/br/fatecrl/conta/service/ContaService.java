@@ -56,7 +56,6 @@ public class ContaService implements IService<Conta> {
 
 	@Override
 	public List<Conta> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return repository.findAll();
 	}
 }
