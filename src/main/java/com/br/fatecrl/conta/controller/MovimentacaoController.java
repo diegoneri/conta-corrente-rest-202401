@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.br.fatecrl.conta.model.Conta;
-import com.br.fatecrl.conta.service.ContaService;
+import com.br.fatecrl.conta.model.Movimentacao;
+import com.br.fatecrl.conta.service.MovimentacaoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,13 +26,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api/conta")
-@Tag(name = "Conta corrente", description = "Gerenciar conta corrente")
-public class ContaController implements IController<Conta>{
+@RequestMapping("/api/conta/{idConta}/movimentacao")
+@Tag(name = "Movimentações", description = "Movimentações de uma movimentacao corrente")
+public class MovimentacaoController implements IController<Movimentacao>{
 	@Autowired
-	private ContaService service;
+	private MovimentacaoService service;
 	
-	@Override
 	@GetMapping(produces = "application/json")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200"
@@ -44,64 +43,63 @@ public class ContaController implements IController<Conta>{
 			           , content = {@Content(mediaType = "application/json")} 
 			)
 	})
-	@Operation(summary = "Retorna a lista de contas",
-		   description = "Obtém uma lista de contas com todos os seus dados")
-	public ResponseEntity<List<Conta>> getAll(){
-		return ResponseEntity.ok(service.findAll());
+	@Operation(summary = "Retorna a lista de movimentacaos",
+		   description = "Obtém uma lista de movimentações por conta")
+	public ResponseEntity<List<Movimentacao>> getAll(@PathVariable("idConta") Integer idConta){
+		return ResponseEntity.ok(service.findByConta(idConta));
 	}
 	
 	@Override
 	@GetMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<Conta> get(@PathVariable("id") Long id) {
-		Conta conta = service.findById(id);
-		if (conta != null) {
-			return ResponseEntity.ok(conta);
+	public ResponseEntity<Movimentacao> get(@PathVariable("id") Long id) {
+		Movimentacao movimentacao = service.findById(id);
+		if (movimentacao != null) {
+			return ResponseEntity.ok(movimentacao);
 			//HTTP 200 OK
 		}
 		return ResponseEntity.notFound().build();
 	}	
 	
-	@Override
 	@PostMapping
-	@Operation(summary = "Cria uma conta")
-	public ResponseEntity<Conta> post(@RequestBody Conta conta){
-		service.create(conta);
+	@Operation(summary = "Cria uma movimentacao")
+	public ResponseEntity<Movimentacao> post(@RequestBody Movimentacao movimentacao, @PathVariable("idConta") Integer idConta){
+		service.saveWithConta(movimentacao, idConta);
 
 		URI location = ServletUriComponentsBuilder
 						.fromCurrentRequest()
 						.path("/{id}")
-						.buildAndExpand(conta.getId())
+						.buildAndExpand(movimentacao.getId())
 						.toUri();
-		return ResponseEntity.created(location).body(conta);
+		return ResponseEntity.created(location).body(movimentacao);
 	}
 	
 	@Override
-	@PutMapping
-	@Operation(summary = "Atualiza uma conta")
-	public ResponseEntity<Conta> put(@RequestBody Conta conta){
-		if (service.update(conta)) {
-			return ResponseEntity.ok(conta);
+	public ResponseEntity<Movimentacao> put(@RequestBody Movimentacao movimentacao){
+		throw new UnsupportedOperationException("Operação não suportada");
+	}
+
+	@Override
+	public ResponseEntity<Movimentacao> patch(@RequestBody Movimentacao movimentacao){
+		throw new UnsupportedOperationException("Operação não suportada");
+	}	
+	
+	@Override
+	@DeleteMapping(value = "/{id}")
+	@Operation(summary = "Exclui uma movimentacao")
+	public ResponseEntity<Movimentacao> delete(@PathVariable("id") Long id){
+		if (service.delete(id)) {
+			return ResponseEntity.noContent().build();
 		}
 		return ResponseEntity.notFound().build();
 	}
 
 	@Override
-	@PatchMapping
-	@Operation(summary = "Atualiza uma conta")
-	public ResponseEntity<Conta> patch(@RequestBody Conta conta){
-		if (service.update(conta)) {
-			return ResponseEntity.ok(conta);
-		}
-		return ResponseEntity.notFound().build();
-	}	
-	
+	public ResponseEntity<List<Movimentacao>> getAll() {
+		throw new UnsupportedOperationException("Operação não suportada");
+	}
+
 	@Override
-	@DeleteMapping(value = "/{id}")
-	@Operation(summary = "Exclui uma conta")
-	public ResponseEntity<Conta> delete(@PathVariable("id") Long id){
-		if (service.delete(id)) {
-			return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.notFound().build();
+	public ResponseEntity<Movimentacao> post(Movimentacao obj) {
+		throw new UnsupportedOperationException("Operação não suportada");
 	}	
 }

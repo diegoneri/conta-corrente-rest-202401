@@ -19,10 +19,10 @@ public abstract class Cliente extends AbstractEntity {
 	@Column(name = "ds_endereco", length = 120)
 	private String endereco;
 
-	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
 	@JoinColumn(name = "fk_conta_id", unique = true)
 	private Conta conta;
-	
+
 	public String getNome() {
 		return nome;
 	}
@@ -37,6 +37,14 @@ public abstract class Cliente extends AbstractEntity {
 
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
+	}
+
+	public Conta getConta() {
+		return conta;
+	}
+
+	public void setConta(Conta conta) {
+		this.conta = conta;
 	}
 
 	public Cliente() {

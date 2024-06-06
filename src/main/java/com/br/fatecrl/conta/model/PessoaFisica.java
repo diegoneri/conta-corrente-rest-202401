@@ -2,8 +2,10 @@ package com.br.fatecrl.conta.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "tb_pessoa_fisica")
 public class PessoaFisica extends Cliente {
     private static final long serialVersionUID = 1L;
 
