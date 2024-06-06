@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.br.fatecrl.conta.model.Conta;
@@ -23,9 +25,9 @@ public class ContaService implements IService<Conta> {
 		return obj.orElse(null);
 	}
 
-	@Override
-	public List<Conta> findAll() {
-		return repository.findAll();
+	
+	public Page<Conta> findAll(Pageable pageable) {
+		return repository.findAll(pageable);
 	}
 
 	@Override
@@ -50,5 +52,11 @@ public class ContaService implements IService<Conta> {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public List<Conta> findAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

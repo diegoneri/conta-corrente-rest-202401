@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +51,13 @@ public class ContaController implements IController<Conta>{
 	public ResponseEntity<List<Conta>> getAll(){
 		return ResponseEntity.ok(service.findAll());
 	}
+	
+	@Operation(summary = "Retorna a lista de contas, de forma paginada",
+			   description = "Obtém uma lista de contas com todos os seus dados, de forma paginada")
+	@GetMapping(value = "/page")
+	public ResponseEntity<Page<Conta>> getAll(Pageable pageable){
+		return ResponseEntity.ok(service.findAll(pageable));
+	}	
 	
 	@Override
 	@GetMapping(value = "/{id}", produces = "application/json")
