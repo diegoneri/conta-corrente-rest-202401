@@ -1,7 +1,15 @@
 package com.br.fatecrl.conta.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -13,10 +21,12 @@ public class Conta extends AbstractEntity {
 	private Integer agencia;
 	@Column(name = "nm_numero", nullable = false, length = 10)
 	private String numero;
-	@Column(name = "nm_titular", nullable = false, length = 100)
-	private String titular;
 	@Column(name = "vl_saldo", nullable = false)
 	private Double saldo;
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "conta_id")
+	private List<Movimentacao> movimentacoes;
 
 	public Conta() {
 
@@ -42,20 +52,20 @@ public class Conta extends AbstractEntity {
 		this.numero = numero;
 	}
 
-	public String getTitular() {
-		return titular;
-	}
-
-	public void setTitular(String titular) {
-		this.titular = titular;
-	}
-
 	public Double getSaldo() {
 		return saldo;
 	}
 
 	public void setSaldo(Double saldo) {
 		this.saldo = saldo;
+	}
+	//@JsonIgnore /*Indica que o atributo ou método anotado deve ser ignorado na serialização e desserialização*/
+	public List<Movimentacao> getMovimentacoes() {
+		return movimentacoes;
+	}
+	@JsonProperty /*Usada para mapear nomes de atributos em chaves JSON durante a serialização e desserialização*/
+	public void setMovimentacoes(List<Movimentacao> movimentacoes) {
+		this.movimentacoes = movimentacoes;
 	}
 
 }

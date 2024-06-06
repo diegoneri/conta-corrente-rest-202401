@@ -23,22 +23,10 @@ public class SwaggerConfig {
 								.url("http://springdoc.org");
 		Info info = new Info()
 			.title("Aplicação Conta - FATEC Rubens Lara")
-			.description("Primeira API gerada")
+			.description("API Conta Corrente")
 			.version("v1.0.0")
 			.contact(contact)
 			.license(license);
 		return openApi.info(info);
-	}
-	
-//  OpenAPI financasOpenAPI() {
-//     return new OpenAPI().info(new Info()
-//        .title("API do Projeto Finanças da FATEC")
-//        .description("Esta API é utilizada na disciplina Desenvolvimento para Servidores-II")
-//        .version("v0.0.1")
-//        .contact(new Contact()
-//          .name("Diego Neri de Souza Felix").email("diego@diegoneri.com"))
-//        .license(new License()
-//          .name("Apache 2.0").url("http://springdoc.org")));
-//  }
-	
+	}	
 }
