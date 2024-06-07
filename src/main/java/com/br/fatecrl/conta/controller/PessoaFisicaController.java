@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/pessoaFisica")
@@ -88,7 +89,7 @@ public class PessoaFisicaController implements IController<PessoaFisica>{
 	           , content = {@Content(mediaType = "application/json")} 
 	        )
 	})		
-	public ResponseEntity<PessoaFisica> post(@RequestBody PessoaFisica pessoaFisica){
+	public ResponseEntity<PessoaFisica> post(@Valid @RequestBody PessoaFisica pessoaFisica){
 		service.create(pessoaFisica);
 
 		URI location = ServletUriComponentsBuilder
@@ -117,7 +118,7 @@ public class PessoaFisicaController implements IController<PessoaFisica>{
 	           , content = {@Content(mediaType = "application/json")} 
 			)
 	})	
-	public ResponseEntity<PessoaFisica> put(@RequestBody PessoaFisica pessoaFisica){
+	public ResponseEntity<PessoaFisica> put(@Valid @RequestBody PessoaFisica pessoaFisica){
 		if (service.update(pessoaFisica)) {
 			return ResponseEntity.ok(pessoaFisica);
 		}
@@ -142,7 +143,7 @@ public class PessoaFisicaController implements IController<PessoaFisica>{
 	      , content = {@Content(mediaType = "application/json")} 
 		)
 	})	
-	public ResponseEntity<PessoaFisica> patch(@RequestBody PessoaFisica pessoaFisica){
+	public ResponseEntity<PessoaFisica> patch(@Valid @RequestBody PessoaFisica pessoaFisica){
 		if (service.update(pessoaFisica)) {
 			return ResponseEntity.ok(pessoaFisica);
 		}

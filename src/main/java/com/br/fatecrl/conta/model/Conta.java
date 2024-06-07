@@ -29,9 +29,10 @@ public class Conta extends AbstractEntity {
 	@Column(name = "vl_saldo", nullable = false)
 	private Double saldo;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
 	@JoinColumn(name = "conta_id")
 	@ToString.Exclude
 	private List<Movimentacao> movimentacoes;
+
 
 }

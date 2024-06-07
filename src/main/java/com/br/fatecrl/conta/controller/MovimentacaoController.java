@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.br.fatecrl.conta.dto.MovimentacaoDTO;
+import com.br.fatecrl.conta.mapper.MovimentacaoMapper;
 import com.br.fatecrl.conta.model.Movimentacao;
 import com.br.fatecrl.conta.service.MovimentacaoService;
 
@@ -22,13 +24,17 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/conta/{idConta}/movimentacao")
 @Tag(name = "Movimentações", description = "Movimentações de uma movimentacao corrente")
-public class MovimentacaoController implements IController<Movimentacao>{
+public class MovimentacaoController implements IController<MovimentacaoDTO>{
 	@Autowired
 	private MovimentacaoService service;
+	
+	@Autowired
+	private MovimentacaoMapper mapper;
 	
 	@GetMapping(produces = "application/json")
 	@ApiResponses(value = {
@@ -43,16 +49,20 @@ public class MovimentacaoController implements IController<Movimentacao>{
 	})
 	@Operation(summary = "Retorna a lista de movimentacaos",
 		   description = "Obtém uma lista de movimentações por conta")
-	public ResponseEntity<List<Movimentacao>> getAll(@PathVariable("idConta") Integer idConta){
-		return ResponseEntity.ok(service.findByConta(idConta));
+	public ResponseEntity<List<MovimentacaoDTO>> getAll(@PathVariable("idConta") Integer idConta){
+		return ResponseEntity.ok(
+									mapper.toDTO(
+											service.findByConta(idConta)
+									)
+								 );
 	}
 	
 	@Override
 	@GetMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<Movimentacao> get(@PathVariable("id") Long id) {
+	public ResponseEntity<MovimentacaoDTO> get(@PathVariable("id") Long id) {
 		Movimentacao movimentacao = service.findById(id);
 		if (movimentacao != null) {
-			return ResponseEntity.ok(movimentacao);
+			return ResponseEntity.ok(mapper.toDTO(movimentacao));
 			//HTTP 200 OK
 		}
 		return ResponseEntity.notFound().build();
@@ -60,32 +70,32 @@ public class MovimentacaoController implements IController<Movimentacao>{
 	
 	@PostMapping
 	@Operation(summary = "Cria uma movimentacao")
-	public ResponseEntity<Movimentacao> post(@RequestBody Movimentacao movimentacao
+	public ResponseEntity<MovimentacaoDTO> post(@Valid @RequestBody MovimentacaoDTO movimentacaoDTO
 										, @PathVariable("idConta") Integer idConta){
-		service.saveWithConta(movimentacao, idConta);
+		service.saveWithConta(mapper.toEntity(movimentacaoDTO), idConta);
 
 		URI location = ServletUriComponentsBuilder
 						.fromCurrentRequest()
 						.path("/{id}")
-						.buildAndExpand(movimentacao.getId())
+						.buildAndExpand(0)
 						.toUri();
-		return ResponseEntity.created(location).body(movimentacao);
+		return ResponseEntity.created(location).body(movimentacaoDTO);
 	}
 	
 	@Override
-	public ResponseEntity<Movimentacao> put(@RequestBody Movimentacao movimentacao){
+	public ResponseEntity<MovimentacaoDTO> put(@RequestBody MovimentacaoDTO movimentacao){
 		throw new UnsupportedOperationException("Operação não suportada");
 	}
 
 	@Override
-	public ResponseEntity<Movimentacao> patch(@RequestBody Movimentacao movimentacao){
+	public ResponseEntity<MovimentacaoDTO> patch(@RequestBody MovimentacaoDTO movimentacao){
 		throw new UnsupportedOperationException("Operação não suportada");
 	}	
 	
 	@Override
 	@DeleteMapping(value = "/{id}")
 	@Operation(summary = "Exclui uma movimentacao")
-	public ResponseEntity<Movimentacao> delete(@PathVariable("id") Long id){
+	public ResponseEntity<MovimentacaoDTO> delete(@PathVariable("id") Long id){
 		if (service.delete(id)) {
 			return ResponseEntity.noContent().build();
 		}
@@ -93,12 +103,12 @@ public class MovimentacaoController implements IController<Movimentacao>{
 	}
 
 	@Override
-	public ResponseEntity<List<Movimentacao>> getAll() {
+	public ResponseEntity<List<MovimentacaoDTO>> getAll() {
 		throw new UnsupportedOperationException("Operação não suportada");
 	}
 
 	@Override
-	public ResponseEntity<Movimentacao> post(Movimentacao obj) {
+	public ResponseEntity<MovimentacaoDTO> post(MovimentacaoDTO obj) {
 		throw new UnsupportedOperationException("Operação não suportada");
 	}	
 }
